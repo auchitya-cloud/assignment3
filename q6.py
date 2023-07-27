@@ -1,0 +1,28 @@
+import threading
+
+def convert_to_uppercase(filename):
+    with open(filename, 'r') as f:
+        content = f.read()
+
+    with open(filename, 'w') as f:
+        f.write(content.upper())
+
+if __name__ == "__main__":
+    file_sizes_gb = [1, 2, 3, 4, 5]
+
+    # Create a list to hold the thread objects
+    threads = []
+
+    for size_gb in file_sizes_gb:
+        filename = f"random_strings_{size_gb}gb.txt"
+
+        # Create a thread for each file and start it
+        thread = threading.Thread(target=convert_to_uppercase, args=(filename,))
+        thread.start()
+        threads.append(thread)
+
+    # Wait for all threads to finish
+    for thread in threads:
+        thread.join()
+
+    print("All files converted to uppercase in parallel.")
